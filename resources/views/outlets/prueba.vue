@@ -2,7 +2,7 @@
  
 <div>
     <emit-events @onFire="eventEmittedFromChild"/>
-    <h2>Emmit Events</h2>
+    <h2>Emmit Evendddddts</h2>
     <label for="message">Mensaje</label>
     <input id="message" v-model="message"/>
     <button @click="notify">Notificar al componente padre</button>
