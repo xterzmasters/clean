@@ -15,8 +15,7 @@
 </style>
 @endsection
 @section('content')
-    <outlets></outlets>
-    <footer></footer>
+    
 
 @endsection
                                                                                                                                                                                                                                               
