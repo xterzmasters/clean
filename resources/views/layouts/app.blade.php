@@ -7,7 +7,7 @@
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>{{ config('app.name', 'Laravel') }}</title>
+    <title>XTERZ Delivery</title>
 
     <!-- Fonts -->
     <link rel="dns-prefetch" href="//fonts.gstatic.com">
@@ -22,6 +22,7 @@
 
     <link rel="stylesheet" href="https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.css" />
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
+    <link href="{{ asset('css/menu.css') }}" rel="stylesheet">
      <link rel="stylesheet" href="https://www.xterz.com/files/footer_animation.css">
     <link rel="stylesheet" href="https://www.xterz.com/files/master.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
@@ -290,58 +291,55 @@ table th {
 </head>
 <body>
     <div id="app">
-        <nav class="navbar navbar-expand-md navbar-light navbar-laravel">
-            <div class="container">
-                <a class="navbar-brand" href="{{ url('/') }}">
-                    <img src="https://www.xterz.com/files/logo_ezv.jpg" alt="logo_2" class="small_image_banner" style="width: 20%;">
-                </a>
-                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="{{ __('Toggle navigation') }}">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
+        
 
-                <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                    <!-- Left Side Of Navbar -->
-                   
+        <nav class="nav-bar" style="position: relative;">
+	<div class="container">
+		<input type="checkbox" id="drop-down-cbox"/>
+		<label for="drop-down-cbox">
+			<span></span>
+			<span></span>
+			<span></span>
+		</label>
 
-                    <!-- Right Side Of Navbar -->
-                    <ul class="navbar-nav ml-auto">
-                         <!-- Authentication Links -->
-                        <li class="nav-item"><a class="nav-link" href="{{ route('outlet_map.index') }}">{{ __('menu.our_outlets') }}</a></li>
-                        @guest
-                            <li class="nav-item">
-                                <a class="nav-link" href="{{ route('login') }}">{{ __('Login') }}</a>
-                            </li>
-                            <li class="nav-item">
-                                @if (Route::has('register'))
-                                    <a class="nav-link" href="{{ route('register') }}">{{ __('Register') }}</a>
-                                @endif
-                            </li>
-                        @else
-                            <li class="nav-item">
-                                <a class="nav-link" href="{{ route('outlets.index') }}">{{ __('outlet.list') }}</a>
-                            </li>
-                            <li class="nav-item dropdown">
-                                <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
-                                    {{ Auth::user()->name }} <span class="caret"></span>
-                                </a>
+		<a class="site-logo" href="{{ url('/') }}"><img src="https://www.xterz.com/files/logo_ezv.jpg" alt="logo_2" class="small_image_banner" style="width: 20%;"><a>
 
-                                <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
-                                    <a class="dropdown-item" href="{{ route('logout') }}"
-                                       onclick="event.preventDefault();
-                                                     document.getElementById('logout-form').submit();">
-                                        {{ __('Logout') }}
-                                    </a>
+		<ul class="main-nav small-caps">
+    <li class="nav-item" style="height: auto; line-height: 15px; margin-top: 13px;">
+      <!-- <a class="nav-link" href="{{ route('outlets.index') }}">{{ __('outlet.list') }}</a> -->
+      <a href="{{ route('outlets.create') }}"class="nav-link">{{ __('outlet.create') }}</a>
+     </li>
 
-                                    <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
-                                        @csrf
-                                    </form>
-                                </div>
-                            </li>
-                        @endguest
-                    </ul>
-                </div>
-            </div>
-        </nav>
+			@guest
+			<li><a class="nav-link" href="{{ route('login') }}">{{ __('Login') }}</a></li>
+			<li>
+        @if (Route::has('register'))
+          <a class="nav-link" href="{{ route('register') }}">{{ __('Register') }}</a>
+          @endif
+      </li>
+      @else
+      <li class="nav-item" style="height: auto; line-height: 15px; margin-top: 13px;"><a class="nav-link" href="{{ route('outlet_map.index') }}">{{ __('menu.our_outlets') }}</a></li>
+      <li class="nav-item dropdown">
+          <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
+              {{ Auth::user()->name }} <span class="caret"></span>
+          </a>
+
+          <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+              <a class="dropdown-item" href="{{ route('logout') }}"
+                  onclick="event.preventDefault();
+                                document.getElementById('logout-form').submit();">
+                  {{ __('Logout') }}
+              </a>
+
+              <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                  @csrf
+              </form>
+          </div>
+      </li>
+</ul>
+		@endguest
+	</div>
+</nav>
 
         <main class="py-4 container">
             @yield('content')

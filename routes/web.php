@@ -25,7 +25,6 @@ Route::get('/our_outlets', 'OutletMapController@index')->name('outlet_map.index'
 Route::resource('outlets', 'OutletController');
 
 
-Route::post('/display_name', 'OutletMapController@displayName')->name('display.name');
 
 
 

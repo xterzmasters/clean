@@ -1,8 +1,29 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="card">
+<div class="card" mar>
     <div class="card-body" id="mapid"></div>
+</div>
+<div class="row">
+    <div class="col-4">
+        <div class='d-flex'>
+            <div> el tiempo es: </div>
+            <div id="time"></div>
+        </div>
+    </div>
+    <div class="col-4">
+        <div class='d-flex'>
+            <div> la distancia es: </div>
+            <div id="distance"></div> m.
+        </div>
+    </div>
+    <div class="col-4">
+        <div class='d-flex'>
+            <div> el precio es: </div>
+            <div id="price"></div>
+        </div>
+    </div>
+
 </div>
 
 
@@ -40,10 +61,10 @@
 
 
 <script type="text/javascript">
-    var 
-
-
-    map = L.map('mapid').setView([{{ config('leaflet.map_center_latitude') }}, {{ config('leaflet.map_center_longitude') }}], {{ config('leaflet.zoom_level') }});
+    window.totalPrecio = 0;
+    window.totalDistancia = 0;
+    window.totalTiempo = 0;
+    var map = L.map('mapid').setView([{{ config('leaflet.map_center_latitude') }}, {{ config('leaflet.map_center_longitude') }}], {{ config('leaflet.zoom_level') }});
 
     L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw', {
     attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, ' +
@@ -129,55 +150,12 @@ var laton = -80.19133949;
 // }
 
 
-        //manera de pintar el routing machine en el mapa 07/11/2021
-
-
-
-// axios.get('{{ route('api.outlets.index') }}')
-//     .then(function (response) {
-
-//         // for (var i = 0; i < response.data.features.length; i++) {
-//         //     var puntosRuta  = response.data.features[i] 
-//         //     console.log(puntosRuta)
-//         // }
-       
-
-//         var geocoder = L.Control.Geocoder.nominatim(),
-//             waypoints = [
-//                             L.latLng(response.data.features[0].properties.latitude, response.data.features[0].properties.longitude),
-//                             L.latLng(response.data.features[1].properties.latitude, response.data.features[1].properties.longitude)
-//                         ],  // can be populated later
-//             routeControl = L.Routing.control({
-//                 plan: L.Routing.plan(waypoints, {
-//                         createMarker: function(i, wp) {
-//                             return L.marker(wp.latLng, {
-//                                 draggable: true
-//                             }).bindPopup("Some data for popup");
-//                         },
-//                     geocoder: geocoder,
-//                     units: 'imperial',
-//                     routeWhileDragging: false,
-//                 })
-//             }).addTo(map);
-
-//         });
-
-
-
-
-axios.get('{{ route('api.outlets.index') }}')
+    axios.get('{{ route('api.outlets.index') }}')
     .then(function (response) {
-
-        for (var i = 0; i < response.data.features.length; i++) {
-            var puntosRuta  = response.data.features[i] 
-            console.log(puntosRuta)
-        }
        
-
-
+        var totalPrecio = 0;
 var control = L.Routing.control({
      waypoints: [
-        //  L.latLng(puntosRuta.properties.latitude, puntosRuta.properties.longitude)
     L.latLng(response.data.features[0].properties.latitude, response.data.features[0].properties.longitude),L.latLng(response.data.features[1].properties.latitude, response.data.features[1].properties.longitude)
     ],
     router: new L.Routing.osrmv1({
@@ -186,18 +164,50 @@ var control = L.Routing.control({
     }),
     geocoder: L.Control.Geocoder.nominatim({}),
     units: 'imperial',
-    addWaypoints: false // previene q los usuarios puedan agregar nueva dirección,
-                        // asumiendo q esta pantalla es la q pinta el pedido ya escogido
+    addWaypoints: false // prevent users from adding new waypoints
   
     }).addTo(map);
 
     // console.log(control)
+        
+
     control.on('routeselected', function(e) {
                 var route = e.route
-                console.log(route)
+
+                // calcular distancia millas
+                var distance = route.summary.totalDistance
+                var distanceF = distance / 1609
+
+                var distanceTotal = distanceF.toFixed(1)
+                window.totalDistancia = distanceF
+
+                document.getElementById("distance").innerHTML = distanceTotal
+
+                // calcular precio distancia cada km vale 3 dolares
+                
+                var price = distance * 3
+                var priceM = price.toFixed(1)
+                var priceF = Math.round(priceM)
+                var priceR = priceF / 1000
+                console.log(priceM)
+                var priceTotal = priceR.toLocaleString("en-US", {style: "currency", currency: "USD", minimumFractionDigits: 1})
+                window.totalPrecio = priceM
+                document.getElementById("price").innerHTML = priceTotal
+                
+                // document.getElementById("price").value = totalPrice
+                // calcular tiempo
+                var time = route.summary.totalTime
+                var timeM = time / 60
+                var timeTotal = Math.ceil(timeM)
+                window.totalTiempo = timeM
+                document.getElementById("time").innerHTML = timeTotal
+                
                 })
 
- 
+
+
+
+
 
 });
 

@@ -3,22 +3,21 @@
 @section('title', __('outlet.create'))
 
 @section('content')
-<div class="row justify-content-center">
-    <div class="col-md-6">
+<div class="container justify-content-center">
+    <div class="d-flex">
         <div class="card">
-            <div class="card-header">{{ __('outlet.create') }}</div>
             <form method="POST" action="{{ route('outlets.store') }}" accept-charset="UTF-8">
                 {{ csrf_field() }}
                 <div class="card-body">
 
                     <div class="form-group">
-                                        <label for="uname">Search Address</label>
-                                        <div id="search">
-                                            <input style="width:50%" type="text" name="addr" value="" id="addr" size="58" />
-                                            <button type="button" onclick="addr_search();">Search</button>
-                                            <div id="results"></div>
-                                            </div>
-                                    </div>
+                        <label for="uname">Search Address</label>
+                        <div id="search">
+                            <input style="width:50%" type="text" name="addr" value="" id="addr" size="58" />
+                            <button type="button" onclick="addr_search();">Search</button>
+                            <div id="results"></div>
+                            </div>
+                    </div>
 
                                      <div class="form-group" style="display:none;">
                        <label><b>Observations</b></label>
@@ -51,13 +50,40 @@
                             </div>
                         </div>
                     </div>
-                    <div id="mapid"></div>
                 </div>
                 <div class="card-footer">
                     <input type="submit" value="{{ __('outlet.create') }}" class="btn btn-success">
                     <a href="{{ route('outlets.index') }}" class="btn btn-link">{{ __('app.cancel') }}</a>
                 </div>
             </form>
+        </div>
+        <div class="card">
+                <div class="card-body">
+
+                             
+                    <div class="row" style="display: none;">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="latitude" class="control-label">{{ __('outlet.latitude') }}</label>
+                                <input id="lat" type="text" class="form-control{{ $errors->has('latitude') ? ' is-invalid' : '' }}" name="latitude" value="{{ old('latitude', request('latitude')) }}" required>
+                                {!! $errors->first('latitude', '<span class="invalid-feedback" role="alert">:message</span>') !!}
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="longitude" class="control-label">{{ __('outlet.longitude') }}</label>
+                                <input id="lon" type="text" class="form-control{{ $errors->has('longitude') ? ' is-invalid' : '' }}" name="longitude" value="{{ old('longitude', request('longitude')) }}" required>
+                                {!! $errors->first('longitude', '<span class="invalid-feedback" role="alert">:message</span>') !!}
+                            </div>
+                        </div>
+                    </div>
+                    <div id="mapid"></div>
+                </div>
+                <div class="card-footer">
+                    <input type="submit" value="{{ __('outlet.create') }}" class="btn btn-success">
+                    <a href="{{ route('outlets.index') }}" class="btn btn-link">{{ __('app.cancel') }}</a>
+                </div>
+            
         </div>
     </div>
 </div>

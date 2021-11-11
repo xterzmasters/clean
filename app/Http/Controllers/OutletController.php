@@ -14,7 +14,6 @@ class OutletController extends Controller
      */
     public function index()
     {
-        $this->authorize('manage_outlet');
 
         $outletQuery = Outlet::query();
         $outletQuery->where('observations', 'like', '%'.request('q').'%');
@@ -30,17 +29,21 @@ class OutletController extends Controller
      */
     public function create()
     {
-        $this->authorize('create', new Outlet);
 
         return view('outlets.create');
     }
 
-    public function create_delivery()
+      /**
+     * Display the specified outlet.
+     *
+     * @param  \App\Outlet  $outlet
+     * @return \Illuminate\View\View
+     */
+    public function show(Outlet $outlet)
     {
-        $this->authorize('create_delivery', new Outlet);
-
-        return view('outlets.create_delivery');
+        return view('outlets.show', compact('outlet'));
     }
+
 
     /**
      * Store a newly created outlet in storage.
@@ -82,22 +85,8 @@ class OutletController extends Controller
         return redirect()->route('outlets_finish.show', $outlet);
     }
 
-    /**
-     * Display the specified outlet.
-     *
-     * @param  \App\Outlet  $outlet
-     * @return \Illuminate\View\View
-     */
-    public function show(Outlet $outlet)
-    {
-        return view('outlets.show', compact('outlet'));
-    }
-
-     public function show_delivery(Outlet $outlet)
-    {
-        return view('outlets.show_delivery', compact('outlet'));
-    }
-
+  
+     
 
 
 
